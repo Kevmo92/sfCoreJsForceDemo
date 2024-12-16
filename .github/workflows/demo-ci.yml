@@ -63,7 +63,7 @@ jobs:
         run: |
           sf org create scratch -f config/project-scratch-def.json -y 1 -d
           auth_url=$(sf org display --json --verbose | jq -r '.result.sfdxAuthUrl')
-          echo "auth-url=" >> $GITHUB_OUTPUT
+          echo "auth-url=$auth_url" >> $GITHUB_OUTPUT
 
       # - name: Install Package Version to Scratch org
       #   shell: bash
