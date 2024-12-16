@@ -61,7 +61,7 @@ jobs:
         id: setup-org
         shell: bash
         run: |
-          sf org create scratch -f config/project-scratch-def.json -y 1 -d
+          sf org create scratch -f config/project-scratch-def.json -y 1 -d -m
           auth_url=$(sf org display --json --verbose | jq -r '.result.sfdxAuthUrl')
           echo "auth-url=$auth_url" >> $GITHUB_OUTPUT
 
