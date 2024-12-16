@@ -1,0 +1,104 @@
+name: Demo CI Build
+
+on:
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  CI-build-and-test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 🗃️ Checkout Repo 🗃️
+        uses: actions/checkout@v4
+
+      - name: 📦 Setup Node 📦
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: 📦 npm i 📦
+        run: npm i
+
+      - name: 📦 Create a 2gp Package Version 📦
+        id: create-package
+        shell: bash
+        run: |
+          echo "$DEVHUB_AUTH_URL" >auth_with_quotes.key
+          sf org login sfdx-url -f auth.key -d
+          sf package version create --json --skip-ancestor-check --version-number 0.1.0.NEXT --definition-file config/project-scratch-def.json --package KevmoDemo --installation-key-bypass --code-coverage --version-name ver 0.1.0 | jq '.result' >package_version_report.json
+          job_id=$(jq -r '.Id' package_version_report.json)
+          while [[ "$job_status" != "Success" ]]; do
+            echo "⏱️ Waiting 15 seconds for job-status update from Salesforce. Plz hold 🎶"
+            sleep 15
+
+            sf package version create report --package-create-request-id "$job_id" --json > package_status_report.json
+            job_status=$(jq -r '.result[].Status' package_status_report.json)
+
+            if [[ "$job_status" = "Success" ]]; then
+                echo "✅ The job status is: $job_status"
+            elif [[ "$job_status" = "Error" ]]; then
+                echo "::error title='🚨 Package version create failed. 🥔'::$(sf package version create report --package-create-request-id "$job_id" --json)"
+                exit 1
+            else
+                echo "📞 The job-status is: $job_status"
+            fi
+          done
+          package_version_id=$(sf package version create report --package-create-request-id $job_id --json | jq -r '.result[].SubscriberPackageVersionId')
+          echo "version-id=$package_version_id" >> $GITHUB_OUTPUT
+        env:
+          DEVHUB_AUTH_URL: ${{ secrets.DEVHUB_AUTH_URL }}
+
+      - name: 🚀 Setup Scratch Org 🚀
+        id: setup-org
+        shell: bash
+        run: |
+          sf org create -f config/project-scratch-def.json -y 1 -d
+          auth_url=$(sf org display --json --verbose | jq -r '.result.sfdxAuthUrl')
+          echo "auth-url=" >> $GITHUB_OUTPUT
+
+      # - name: Install Package Version to Scratch org
+      #   shell: bash
+      #   run: |
+      #     echo "$AUTH_URL" >auth_with_quotes.key
+      #     tr -d '\"' <auth_with_quotes.key >auth.key
+      #     sf auth sfdxurl store --sfdx-url-file auth.key --set-default
+      #     rm auth_with_quotes.key
+
+      #     sf org display --json | jq -r '.result' >org_info.json
+      #     export SF_USERNAME=$(jq -r '.username' org_info.json)
+      #     rm org_info.json
+
+      #     ./scripts/installPackageSfCore.js
+      #   env:
+      #     AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
+      #     PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
+
+      - name: Install Package Version to Scratch org
+        shell: bash
+        run: |
+          echo "$AUTH_URL" >auth_with_quotes.key
+          tr -d '\"' <auth_with_quotes.key >auth.key
+          sf auth sfdxurl store --sfdx-url-file auth.key --set-default
+          rm auth_with_quotes.key
+
+          sf org display --json | jq -r '.result' >org_info.json
+          export SF_ACCESS_TOKEN=$(jq -r '.accessToken' org_info.json)
+          export SF_INSTANCE_URL=$(jq -r '.instanceUrl' org_info.json)
+          rm org_info.json
+
+          node scripts/installPackageJsForce.js
+        env:
+          AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
+          PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
+
+      - name: 🧪 Force Apex Tests 🧪
+        shell: bash
+        run: |
+          sf project deploy start -d src/testSuites -w 120
+          sf apex run test --json --result-format tap -s AllTests -w 10
+
+      - name: Cleanup Scratch Org
+        shell: bash
+        if: always()
+        run: sf org delete -p

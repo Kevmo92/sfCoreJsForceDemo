@@ -1,0 +1,27 @@
+{
+  "name": "@Kevmo92/demo",
+  "version": "0.1.0",
+  "homepage": "https://github.com/Kevmo92/sfCoreJsForceDemo#readme",
+  "bugs": {
+    "url": "https://github.com/Kevmo92/sfCoreJsForceDemo/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/Kevmo92/sfCoreJsForceDemo.git"
+  },
+  "license": "UNLICENSED",
+  "author": "Kevmo92",
+  "scripts": {
+  },
+  "devDependencies": {
+    "@jsforce/jsforce-node": "^3.6.3",
+    "@salesforce/cli": "^2.69.14",
+    "@salesforce/core": "^8.8.0",
+    "@salesforce/packaging": "^4.2.15"
+  },
+  "engines": {
+    "node": ">=22",
+    "npm": ">=10"
+  },
+  "engineStrict": true
+}

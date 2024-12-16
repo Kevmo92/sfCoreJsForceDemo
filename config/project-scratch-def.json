@@ -1,0 +1,20 @@
+{
+  "country": "US",
+  "edition": "Partner Developer",
+  "features": [],
+  "hasSampleData": false,
+  "language": "English",
+  "orgName": "kevmo-demo",
+  "settings": {
+    "apexSettings": {
+      "enableAggregateCodeCoverageOnly": true,
+      "enableCompileOnDeploy": false
+    },
+    "lightningExperienceSettings": {
+      "enableS1DesktopEnabled": true
+    },
+    "userManagementSettings": {
+      "permsetsInFieldCreation": true
+    }
+  }
+}

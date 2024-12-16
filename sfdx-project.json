@@ -1,0 +1,13 @@
+{
+  "namespace": "",
+  "sfdcLoginUrl": "https://login.salesforce.com",
+  "sourceApiVersion": "62.0",
+  "packageDirectories": [
+    {
+      "default": true,
+      "package": "KevmoDemo",
+      "path": "src/demo",
+      "versionNumber": "0.1.0.NEXT"
+    }
+  ]
+}
