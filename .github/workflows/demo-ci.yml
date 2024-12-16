@@ -18,7 +18,12 @@ jobs:
           node-version: "22"
 
       - name: 📦 npm i 📦
+        shell: bash
         run: npm i
+
+      - name: 📦 Setup Salesforce CLI 📦
+        shell: bash
+        run: npm i -g @salesforce/cli
 
       - name: 📦 Create a 2gp Package Version 📦
         id: create-package

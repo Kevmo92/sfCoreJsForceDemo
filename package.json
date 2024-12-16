@@ -15,7 +15,6 @@
   },
   "devDependencies": {
     "@jsforce/jsforce-node": "^3.6.3",
-    "@salesforce/cli": "^2.69.14",
     "@salesforce/core": "^8.8.0",
     "@salesforce/packaging": "^4.2.15"
   },
