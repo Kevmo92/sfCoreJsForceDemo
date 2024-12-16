@@ -32,6 +32,8 @@ jobs:
           echo "$DEVHUB_AUTH_URL" >auth_with_quotes.key
           tr -d '\"' <auth_with_quotes.key >auth.key
           sf org login sfdx-url -f auth.key -d
+          rm auth_with_quotes.key auth.key
+
           sf package version create --json --skip-ancestor-check --version-number 0.1.0.NEXT --definition-file config/project-scratch-def.json --package KevmoDemo --installation-key-bypass --code-coverage --version-name ver 0.1.0 | jq '.result' >package_version_report.json
           job_id=$(jq -r '.Id' package_version_report.json)
           while [[ "$job_status" != "Success" ]]; do
