@@ -11,8 +11,8 @@
   },
   "license": "UNLICENSED",
   "author": "Kevmo92",
-  "scripts": {
-  },
+  "type": "module",
+  "scripts": {},
   "devDependencies": {
     "@jsforce/jsforce-node": "^3.6.3",
     "@salesforce/core": "^8.8.0",
