@@ -77,7 +77,7 @@ jobs:
           export SF_USERNAME=$(jq -r '.username' org_info.json)
           rm org_info.json
 
-          ./scripts/installPackageSfCore.js
+          ./scripts/installPackageSfCore.cjs
         env:
           AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
           PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
