@@ -106,7 +106,7 @@ jobs:
           sf project deploy start -d src/testSuites -w 120
           sf apex run test --json --result-format tap -s AllTests -w 10
 
-      - name: Cleanup Scratch Org
+      - name: 🗑️ Cleanup Scratch Org 🚮
         shell: bash
         if: always()
         run: sf org delete scratch -p
