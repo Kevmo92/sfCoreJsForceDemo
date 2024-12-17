@@ -10,9 +10,9 @@
     </applicationVisibilities>
     <customPermissions>
         <enabled>true</enabled>
-        <name>Generate_Release_Notes</name>
+        <name>Demo_Baby</name>
     </customPermissions>
-    <description>Grants the ability to generate automated release note. Intended for use ONLY by Data Integration Developers</description>
+    <description>This is just a demo</description>
     <hasActivationRequired>false</hasActivationRequired>
-    <label>Automated Release Notes</label>
+    <label>Demo Baby</label>
 </PermissionSet>

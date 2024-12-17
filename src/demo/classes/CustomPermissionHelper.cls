@@ -51,8 +51,7 @@ public class CustomPermissionHelper extends APermissionHelper {
     ];
   }
 
-  public class CustomPermissionNotFoundException extends Exception {
-  }
+  public class CustomPermissionNotFoundException extends Exception {}
 
   private static final String PERMISSION_NOT_FOUND_MESSAGE = 'Custom Permission ({0}) not found.';
 }

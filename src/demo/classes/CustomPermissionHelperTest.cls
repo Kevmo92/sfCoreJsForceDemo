@@ -12,5 +12,5 @@ public class CustomPermissionHelperTest {
     System.assertEquals(false, actualValue);
   }
 
-  private static final String LOCAL_CUSTOM_PERMISSION = 'Generate_Release_Notes';
+  private static final String LOCAL_CUSTOM_PERMISSION = 'Demo_Baby';
 }

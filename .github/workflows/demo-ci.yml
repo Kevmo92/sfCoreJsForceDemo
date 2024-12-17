@@ -12,16 +12,16 @@ jobs:
       - name: 🗃️ Checkout Repo 🗃️
         uses: actions/checkout@v4
 
-      - name: 📦 Setup Node 📦
+      - name: ⚡️ Setup Node ⚡️
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: 📦 npm i 📦
+      - name: ⚙️ npm i ⚙️
         shell: bash
         run: npm i
 
-      - name: 📦 Setup Salesforce CLI 📦
+      - name: 🤖 Setup Salesforce CLI 🤖
         shell: bash
         run: npm i -g @salesforce/cli
 
@@ -65,7 +65,7 @@ jobs:
           auth_url=$(sf org display --json --verbose | jq -r '.result.sfdxAuthUrl')
           echo "auth-url=$auth_url" >> $GITHUB_OUTPUT
 
-      - name: Install Package Version to Scratch org
+      - name: 📲 Install Package Version to Scratch org 📭
         shell: bash
         run: |
           echo "$AUTH_URL" >auth_with_quotes.key
@@ -82,7 +82,7 @@ jobs:
           AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
           PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
 
-      # - name: Install Package Version to Scratch org
+      # - name: ☕️ Install Package Version to Scratch org ☕️
       #   shell: bash
       #   run: |
       #     echo "$AUTH_URL" >auth_with_quotes.key
@@ -106,7 +106,7 @@ jobs:
           sf project deploy start -d src/testSuites -w 120
           sf apex run test --json --result-format tap -s AllTests -w 10
 
-      - name: Cleanup Scratch Org
+      - name: 🗑️ Cleanup Scratch Org 🚮
         shell: bash
         if: always()
         run: sf org delete scratch -p
