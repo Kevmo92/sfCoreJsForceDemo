@@ -12,16 +12,16 @@ jobs:
       - name: 🗃️ Checkout Repo 🗃️
         uses: actions/checkout@v4
 
-      - name: 📦 Setup Node 📦
+      - name: ⚡️ Setup Node ⚡️
         uses: actions/setup-node@v4
         with:
           node-version: "22"
 
-      - name: 📦 npm i 📦
+      - name: ⚙️ npm i ⚙️
         shell: bash
         run: npm i
 
-      - name: 📦 Setup Salesforce CLI 📦
+      - name: 🤖 Setup Salesforce CLI 🤖
         shell: bash
         run: npm i -g @salesforce/cli
 
@@ -65,24 +65,7 @@ jobs:
           auth_url=$(sf org display --json --verbose | jq -r '.result.sfdxAuthUrl')
           echo "auth-url=$auth_url" >> $GITHUB_OUTPUT
 
-      - name: Install Package Version to Scratch org
-        shell: bash
-        run: |
-          echo "$AUTH_URL" >auth_with_quotes.key
-          tr -d '\"' <auth_with_quotes.key >auth.key
-          sf auth sfdxurl store --sfdx-url-file auth.key --set-default
-          rm auth_with_quotes.key
-
-          sf org display --json | jq -r '.result' >org_info.json
-          export SF_USERNAME=$(jq -r '.username' org_info.json)
-          rm org_info.json
-
-          ./scripts/installPackageSfCore.cjs
-        env:
-          AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
-          PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
-
-      # - name: Install Package Version to Scratch org
+      # - name: 📲 Install Package Version to Scratch org 📭
       #   shell: bash
       #   run: |
       #     echo "$AUTH_URL" >auth_with_quotes.key
@@ -91,14 +74,31 @@ jobs:
       #     rm auth_with_quotes.key
 
       #     sf org display --json | jq -r '.result' >org_info.json
-      #     export SF_ACCESS_TOKEN=$(jq -r '.accessToken' org_info.json)
-      #     export SF_INSTANCE_URL=$(jq -r '.instanceUrl' org_info.json)
+      #     export SF_USERNAME=$(jq -r '.username' org_info.json)
       #     rm org_info.json
 
-      #     node scripts/installPackageJsForce.js
+      #     ./scripts/installPackageSfCore.cjs
       #   env:
       #     AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
       #     PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
+
+      - name: ☕️ Install Package Version to Scratch org ☕️
+        shell: bash
+        run: |
+          echo "$AUTH_URL" >auth_with_quotes.key
+          tr -d '\"' <auth_with_quotes.key >auth.key
+          sf auth sfdxurl store --sfdx-url-file auth.key --set-default
+          rm auth_with_quotes.key
+
+          sf org display --json | jq -r '.result' >org_info.json
+          export SF_ACCESS_TOKEN=$(jq -r '.accessToken' org_info.json)
+          export SF_INSTANCE_URL=$(jq -r '.instanceUrl' org_info.json)
+          rm org_info.json
+
+          node scripts/installPackageJsForce.js
+        env:
+          AUTH_URL: ${{ steps.setup-org.outputs.auth-url }}
+          PACKAGE_VERSION_ID: ${{ steps.create-package.outputs.version-id }}
 
       - name: 🧪 Force Apex Tests 🧪
         shell: bash
