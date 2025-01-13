@@ -21,6 +21,7 @@ async function installPackage() {
   const conn = new Connection({
     accessToken: process.env.SF_ACCESS_TOKEN,
     instanceUrl: process.env.SF_INSTANCE_URL,
+    version: '62.0'
   });
   const packageId = process.env.PACKAGE_VERSION_ID;
 
